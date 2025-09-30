@@ -14,18 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.vitor.aulas.R;
 
-public class MainActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity {
 
     private Switch switch1;
-    private TextView alunoTxt, docenteTxt;
+    private TextView alunoTxt, docenteTxt, telaCadastro;
     private EditText emailEt, senhaEt;
     private ImageView olhoImg;
     private TextView cadastroTxt;
@@ -35,7 +31,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         switch1 = findViewById(R.id.switch1);
         docenteTxt = findViewById(R.id.DocenteTxt);
@@ -43,6 +39,12 @@ public class MainActivity extends BaseActivity {
         emailEt = findViewById(R.id.emailEt);
         senhaEt = findViewById(R.id.senhaEt);
         olhoImg = findViewById(R.id.olhoImg);
+        telaCadastro = findViewById(R.id.cadastroTxt);
+
+        telaCadastro.setOnClickListener(v ->{
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
 
         olhoImg.setOnClickListener(new View.OnClickListener() {
             boolean senhaVisivel = false;
