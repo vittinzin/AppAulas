@@ -52,13 +52,11 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (senhaVisivel) {
-
                     senhaEt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                     senhaEt.setSelection(senhaEt.length());
                     senhaVisivel = false;
                     olhoImg.setImageResource(R.drawable.fechado);
                 } else {
-
                     senhaEt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     senhaEt.setSelection(senhaEt.length());
                     senhaVisivel = true;
@@ -74,7 +72,6 @@ public class LoginActivity extends BaseActivity {
                     alunoTxt.setTypeface(null, Typeface.NORMAL);
                     docenteTxt.setTypeface(null, Typeface.BOLD);
                     emailEt.setHint("Email do docente");
-
                 } else {
                     alunoTxt.setTypeface(null, Typeface.BOLD);
                     docenteTxt.setTypeface(null, Typeface.NORMAL);
@@ -83,9 +80,6 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        senhaEt = findViewById(R.id.senhaEt);
-        emailEt = findViewById(R.id.emailEt);
-        cadastroTxt = findViewById(R.id.cadastroTxt);
         loginBtn = findViewById(R.id.loginBtn);
 
         loginBtn.setOnClickListener(v -> {
@@ -95,15 +89,11 @@ public class LoginActivity extends BaseActivity {
                 if (db.verifyUser(senha, email)) {
                     Toast.makeText(this, "Bem vindo!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Dados invalidos", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Dados inválidos", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(this, "Porfavor preencha todos campos!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Por favor preencha todos os campos!", Toast.LENGTH_SHORT).show();
             }
-        });
-        cadastroTxt.setOnClickListener(v ->{
-            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-            startActivity(intent);
         });
     }
 }
