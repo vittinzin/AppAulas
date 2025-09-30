@@ -12,14 +12,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.vitor.aulas.R;
 
-public class MainActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity {
 
     private Switch switch1;
     private TextView alunoTxt, docenteTxt, telaCadastro;
@@ -30,7 +26,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         switch1 = findViewById(R.id.switch1);
         docenteTxt = findViewById(R.id.DocenteTxt);
@@ -41,7 +37,7 @@ public class MainActivity extends BaseActivity {
         telaCadastro = findViewById(R.id.cadastroTxt);
 
         telaCadastro.setOnClickListener(v ->{
-            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
         });
 
