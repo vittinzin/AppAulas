@@ -1,14 +1,17 @@
 package com.vitor.aulas.view;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.vitor.aulas.R;
 
 public class MainActivity extends BaseActivity {
@@ -24,6 +28,8 @@ public class MainActivity extends BaseActivity {
     private TextView alunoTxt, docenteTxt;
     private EditText emailEt, senhaEt;
     private ImageView olhoImg;
+    private TextView cadastroTxt;
+    private Button loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +79,29 @@ public class MainActivity extends BaseActivity {
                     emailEt.setHint("Email do aluno");
                 }
             }
+        });
+
+        senhaEt = findViewById(R.id.senhaEt);
+        emailEt = findViewById(R.id.emailEt);
+        cadastroTxt = findViewById(R.id.cadastroTxt);
+        loginBtn = findViewById(R.id.loginBtn);
+
+        loginBtn.setOnClickListener(v -> {
+            String senha = senhaEt.getText().toString().trim();
+            String email = emailEt.getText().toString().trim();
+            if (!senha.isEmpty() && !email.isEmpty()) {
+                if (db.verifyUser(senha, email)) {
+                    Toast.makeText(this, "Bem vindo!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Dados invalidos", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Porfavor preencha todos campos!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        cadastroTxt.setOnClickListener(v ->{
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
         });
     }
 }
