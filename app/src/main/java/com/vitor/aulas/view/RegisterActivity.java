@@ -11,13 +11,9 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.vitor.aulas.R;
-import com.vitor.aulas.controller.DBController_Agenda;
 import com.vitor.aulas.controller.DBController_Login;
 import com.vitor.aulas.model.Usuario;
-
 import java.io.File;
 import java.io.FileOutputStream;
 
