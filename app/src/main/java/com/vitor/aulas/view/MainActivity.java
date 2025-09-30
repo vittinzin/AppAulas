@@ -1,5 +1,6 @@
 package com.vitor.aulas.view;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
@@ -21,7 +22,7 @@ import com.vitor.aulas.R;
 public class MainActivity extends BaseActivity {
 
     private Switch switch1;
-    private TextView alunoTxt, docenteTxt;
+    private TextView alunoTxt, docenteTxt, telaCadastro;
     private EditText emailEt, senhaEt;
     private ImageView olhoImg;
 
@@ -37,6 +38,12 @@ public class MainActivity extends BaseActivity {
         emailEt = findViewById(R.id.emailEt);
         senhaEt = findViewById(R.id.senhaEt);
         olhoImg = findViewById(R.id.olhoImg);
+        telaCadastro = findViewById(R.id.cadastroTxt);
+
+        telaCadastro.setOnClickListener(v ->{
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
 
         olhoImg.setOnClickListener(new View.OnClickListener() {
             boolean senhaVisivel = false;
