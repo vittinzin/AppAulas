@@ -4,6 +4,16 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

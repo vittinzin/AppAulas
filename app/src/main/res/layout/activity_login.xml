@@ -8,7 +8,6 @@
     android:background="#F5F5F5"
     tools:context=".view.LoginActivity">
 
-
     <Button
         android:id="@+id/loginBtn"
         android:layout_width="300dp"

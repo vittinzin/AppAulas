@@ -43,6 +43,7 @@ public class LoginActivity extends BaseActivity {
 
         telaCadastro.setOnClickListener(v ->{
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);
         });
 
@@ -77,22 +78,6 @@ public class LoginActivity extends BaseActivity {
                     docenteTxt.setTypeface(null, Typeface.NORMAL);
                     emailEt.setHint("Email do aluno");
                 }
-            }
-        });
-
-        loginBtn = findViewById(R.id.loginBtn);
-
-        loginBtn.setOnClickListener(v -> {
-            String senha = senhaEt.getText().toString().trim();
-            String email = emailEt.getText().toString().trim();
-            if (!senha.isEmpty() && !email.isEmpty()) {
-                if (db.verifyUser(senha, email)) {
-                    Toast.makeText(this, "Bem vindo!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Dados inválidos", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(this, "Por favor preencha todos os campos!", Toast.LENGTH_SHORT).show();
             }
         });
     }

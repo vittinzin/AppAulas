@@ -1,21 +1,27 @@
 package com.vitor.aulas.view;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+
 import com.vitor.aulas.R;
-import com.vitor.aulas.controller.DBController_Login;
+import com.vitor.aulas.controller.RegisterDbController;
+import com.vitor.aulas.controller.RegisterController;
+import com.vitor.aulas.db.RegisterDb;
 import com.vitor.aulas.model.Usuario;
-import java.io.File;
-import java.io.FileOutputStream;
+
+import java.util.List;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -24,12 +30,18 @@ public class RegisterActivity extends BaseActivity {
     private EditText emailEt2, cpfEt, senhaEt2, confirmarSenhaEt;
     private Button loginBtn2;
     private ImageView imageView2;
+    private RegisterDb rdb;
+    private RegisterController rc;
+    private RegisterDbController dblo;
 
-    private boolean isDocente = false; // controla se o cadastro é docente ou aluno
+    private boolean isDocente = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setStatusBarColor(Color.TRANSPARENT);
+
         setContentView(R.layout.activity_register);
 
         switch2 = findViewById(R.id.switch2);
@@ -42,7 +54,6 @@ public class RegisterActivity extends BaseActivity {
         loginBtn2 = findViewById(R.id.loginBtn2);
         imageView2 = findViewById(R.id.imageView2);
 
-        // troca aluno/docente
         switch2.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isDocente = isChecked;
             if (isChecked) {
@@ -58,7 +69,6 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
-        // botão registrar
         loginBtn2.setOnClickListener(v -> registrarUsuario());
     }
 
@@ -83,46 +93,38 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
 
-        // usa sempre a foto padrão
-        Bitmap bitmap = ((BitmapDrawable) imageView2.getDrawable()).getBitmap();
-        String pathFoto = salvarImagemEmArquivo(bitmap, cpf);
+        rc = new RegisterController();
+        dblo = new RegisterDbController(this);
 
-        // salvar no banco
-        DBController_Login db = new DBController_Login(this);
-        Usuario usuario = new Usuario(email, cpf, senha, isDocente ? "DOCENTE" : "ALUNO");
-        db.cadastrarUsuario(usuario);
+        String alunoOu;
+        if (isDocente) {
+           alunoOu = "Docente";
+        } else {
+            alunoOu = "Aluno";
+        }
 
-        // salvar login
-        SharedPreferences prefs = getSharedPreferences("usuarioLogado", MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("cpf", cpf);
-        editor.putString("fotoUsuario", pathFoto);
-        editor.apply();
+        Usuario usuario = new Usuario(
+                emailEt2.getText().toString(),
+                cpfEt.getText().toString(),
+                senhaEt2.getText().toString(),
+                alunoOu
+        );
 
-        Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
+        if (rc.confirmRegister(usuario) == -1) {
+            dblo.insert(usuario);
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+            List<Usuario> list = dblo.getAll();
+            Log.d("DB", "Usuarios no banco agora: " + list.size());
+        } else {
+            Toast.makeText(this, "Invalid!", Toast.LENGTH_SHORT).show();
+        }
 
-        // ir para main
-        startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-        finish();
     }
 
     private boolean isEmailValido(String email) {
         String regex = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
         return email != null && email.matches(regex);
-    }
-
-    private String salvarImagemEmArquivo(Bitmap bitmap, String nomeArquivo) {
-        File diretorio = new File(getFilesDir(), "usuarios");
-        if (!diretorio.exists()) diretorio.mkdirs();
-
-        File arquivoImagem = new File(diretorio, nomeArquivo + ".jpg");
-        try (FileOutputStream out = new FileOutputStream(arquivoImagem)) {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            return arquivoImagem.getAbsolutePath();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
