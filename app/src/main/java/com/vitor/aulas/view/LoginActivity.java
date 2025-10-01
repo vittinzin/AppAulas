@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
 import com.vitor.aulas.controller.RegisterDbController;
+import com.vitor.aulas.model.Aluno;
 import com.vitor.aulas.model.Usuario;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEt, senhaEt;
     private ImageView olhoImg;
     private Button loginBtn;
+
 
     private RegisterDbController dbController;
 
@@ -107,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (u.getTipo().equalsIgnoreCase("Aluno")) {
                     Intent intent = new Intent(LoginActivity.this, AlunoActivity.class);
-                    intent.putExtra("usuario_email", email);
+                    intent.putExtra("usuario_cpf", u.getCpf()); // manda o CPF, não o email
                     startActivity(intent);
                     finish();
                 } else if (u.getTipo().equalsIgnoreCase("Docente")) {

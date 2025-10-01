@@ -26,10 +26,13 @@ public class AlunoActivity extends AppCompatActivity {
         String email = getIntent().getStringExtra("usuario_email");
         welcomeTxt.setText("Bem-vindo, Aluno: " + email);
 
-        // Botão leva para a tela de atividades
+
+        String cpf = getIntent().getStringExtra("usuario_cpf");
+        welcomeTxt.setText("Bem-vindo, Aluno: " + cpf);
+
         minhasAtividadesBtn.setOnClickListener(v -> {
             Intent intent = new Intent(AlunoActivity.this, AlunoAtividadesActivity.class);
-            intent.putExtra("usuario_email", email); // passa email para filtrar atividades do aluno
+            intent.putExtra("usuario_cpf", cpf); // passa CPF para filtrar
             startActivity(intent);
         });
     }
