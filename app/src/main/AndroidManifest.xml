@@ -34,7 +34,7 @@
             android:name=".view.RegistrarAlunoActivity"
             android:exported="false" />
 
-
+        <!-- Turmas e Atividades -->
         <activity
             android:name=".view.CriarTurmaActivity"
             android:exported="false" />
@@ -43,6 +43,9 @@
             android:exported="false" />
         <activity
             android:name=".view.AlunoAtividadesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.AlunoActivity"
             android:exported="false" />
 
         <!-- Professor -->
