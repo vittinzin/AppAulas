@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/welcomeTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bem-vindo, Professor"
+        android:textSize="20sp"
+        android:paddingBottom="24dp"/>
+
+    <Button
+        android:id="@+id/registrarAlunoBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registrar Aluno"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/criarTurmaBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Criar Turma"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/atribuirAtividadeBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Atribuir Atividade"
+        android:layout_marginBottom="12dp"/>
+
+    <Button
+        android:id="@+id/gerenciarAtividadesBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gerenciar Atividades"/>
+</LinearLayout>

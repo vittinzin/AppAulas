@@ -1,51 +1,46 @@
 package com.vitor.aulas.view;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
+import com.vitor.aulas.controller.AlunoDbController;
 import com.vitor.aulas.controller.RegisterDbController;
 import com.vitor.aulas.controller.RegisterController;
-import com.vitor.aulas.db.RegisterDb;
+import com.vitor.aulas.controller.ProfessorDbController;
+import com.vitor.aulas.model.Aluno;
+import com.vitor.aulas.model.Professor;
 import com.vitor.aulas.model.Usuario;
 
 import java.util.List;
 
-public class RegisterActivity extends BaseActivity {
+public class RegisterActivity extends AppCompatActivity {
 
     private Switch switch2;
     private TextView alunoTxt2, docenteTxt2;
     private EditText emailEt2, cpfEt, senhaEt2, confirmarSenhaEt;
     private Button loginBtn2;
-    private ImageView imageView2;
-    private RegisterDb rdb;
     private RegisterController rc;
     private RegisterDbController dblo;
+    private AlunoDbController alunoController;
+    private ProfessorDbController professorController;
 
     private boolean isDocente = false;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-
         setContentView(R.layout.activity_register);
 
+        // Bind dos elementos da tela
         switch2 = findViewById(R.id.switch2);
         docenteTxt2 = findViewById(R.id.docenteTxt2);
         alunoTxt2 = findViewById(R.id.alunoTxt2);
@@ -54,7 +49,13 @@ public class RegisterActivity extends BaseActivity {
         senhaEt2 = findViewById(R.id.senhaEt2);
         confirmarSenhaEt = findViewById(R.id.confirmarSenhaEt);
         loginBtn2 = findViewById(R.id.loginBtn2);
-        imageView2 = findViewById(R.id.imageView2);
+
+
+        rc = new RegisterController();
+        dblo = new RegisterDbController(this);
+        alunoController = new AlunoDbController(this);
+        professorController = new ProfessorDbController(this);
+
 
         switch2.setOnCheckedChangeListener((buttonView, isChecked) -> {
             isDocente = isChecked;
@@ -71,6 +72,7 @@ public class RegisterActivity extends BaseActivity {
             }
         });
 
+
         loginBtn2.setOnClickListener(v -> registrarUsuario());
     }
 
@@ -79,6 +81,7 @@ public class RegisterActivity extends BaseActivity {
         String cpf = cpfEt.getText().toString().trim();
         String senha = senhaEt2.getText().toString().trim();
         String confirmarSenha = confirmarSenhaEt.getText().toString().trim();
+
 
         if (!isEmailValido(email)) {
             Toast.makeText(this, "E-mail inválido", Toast.LENGTH_SHORT).show();
@@ -95,34 +98,33 @@ public class RegisterActivity extends BaseActivity {
             return;
         }
 
-        rc = new RegisterController();
-        dblo = new RegisterDbController(this);
-
-        String alunoOu;
-        if (isDocente) {
-           alunoOu = "Docente";
-        } else {
-            alunoOu = "Aluno";
-        }
-
-        Usuario usuario = new Usuario(
-                emailEt2.getText().toString(),
-                cpfEt.getText().toString(),
-                senhaEt2.getText().toString(),
-                alunoOu
-        );
+        String tipo = isDocente ? "Docente" : "Aluno";
+        Usuario usuario = new Usuario(email, cpf, senha, tipo);
 
         if (rc.confirmRegister(usuario) == -1) {
-            dblo.insert(usuario);
-            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            finish();
-            List<Usuario> list = dblo.getAll();
-            Log.d("DB", "Usuarios no banco agora: " + list.size());
-        } else {
-            Toast.makeText(this, "Invalid!", Toast.LENGTH_SHORT).show();
-        }
 
+            dblo.insert(usuario);
+
+            if (isDocente) {
+
+                Professor professor = new Professor(0, email, cpf, email);
+                professorController.insertProfessor(professor);
+            } else {
+
+                Aluno aluno = new Aluno(0, email, cpf, 1);
+                alunoController.insertAluno(aluno);
+            }
+
+            Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            finish();
+
+            List<Usuario> list = dblo.getAll();
+
+            android.util.Log.d("DB", "Usuarios no banco agora: " + list.size());
+        } else {
+            Toast.makeText(this, "Preencha todos os campos corretamente!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean isEmailValido(String email) {

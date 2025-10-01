@@ -14,18 +14,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.vitor.aulas.R;
+import com.vitor.aulas.controller.RegisterDbController;
+import com.vitor.aulas.model.Usuario;
 
-public class LoginActivity extends BaseActivity {
+import java.util.List;
+
+public class LoginActivity extends AppCompatActivity {
 
     private Switch switch1;
     private TextView alunoTxt, docenteTxt, telaCadastro;
     private EditText emailEt, senhaEt;
     private ImageView olhoImg;
-    private TextView cadastroTxt;
     private Button loginBtn;
+
+    private RegisterDbController dbController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,8 @@ public class LoginActivity extends BaseActivity {
         olhoImg = findViewById(R.id.olhoImg);
         telaCadastro = findViewById(R.id.cadastroTxt);
         loginBtn = findViewById(R.id.loginBtn);
+
+        dbController = new RegisterDbController(this);
 
         telaCadastro.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -67,19 +74,54 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    alunoTxt.setTypeface(null, Typeface.NORMAL);
-                    docenteTxt.setTypeface(null, Typeface.BOLD);
-                    emailEt.setHint("Email do docente");
-                } else {
-                    alunoTxt.setTypeface(null, Typeface.BOLD);
-                    docenteTxt.setTypeface(null, Typeface.NORMAL);
-                    emailEt.setHint("Email do aluno");
-                }
+        switch1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                alunoTxt.setTypeface(null, Typeface.NORMAL);
+                docenteTxt.setTypeface(null, Typeface.BOLD);
+                emailEt.setHint("Email do docente");
+            } else {
+                alunoTxt.setTypeface(null, Typeface.BOLD);
+                docenteTxt.setTypeface(null, Typeface.NORMAL);
+                emailEt.setHint("Email do aluno");
             }
         });
+
+        loginBtn.setOnClickListener(v -> validarLogin());
+    }
+
+    private void validarLogin() {
+        String email = emailEt.getText().toString().trim();
+        String senha = senhaEt.getText().toString().trim();
+
+        if (email.isEmpty() || senha.isEmpty()) {
+            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<Usuario> usuarios = dbController.getAll();
+        boolean encontrado = false;
+
+        for (Usuario u : usuarios) {
+            if (u.getEmail().equals(email) && u.getSenha().equals(senha)) {
+                encontrado = true;
+
+                if (u.getTipo().equalsIgnoreCase("Aluno")) {
+                    Intent intent = new Intent(LoginActivity.this, AlunoActivity.class);
+                    intent.putExtra("usuario_email", email);
+                    startActivity(intent);
+                    finish();
+                } else if (u.getTipo().equalsIgnoreCase("Docente")) {
+                    Intent intent = new Intent(LoginActivity.this, ProfessorActivity.class);
+                    intent.putExtra("usuario_email", email);
+                    startActivity(intent);
+                    finish();
+                }
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            Toast.makeText(this, "Email ou senha incorretos", Toast.LENGTH_SHORT).show();
+        }
     }
 }
