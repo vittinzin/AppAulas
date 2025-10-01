@@ -12,7 +12,7 @@ import com.vitor.aulas.model.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterDbController {
+public class  RegisterDbController {
 
     private SQLiteDatabase db;
     private RegisterDb rdb;

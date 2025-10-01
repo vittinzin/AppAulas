@@ -40,8 +40,9 @@ public class LoginActivity extends BaseActivity {
         senhaEt = findViewById(R.id.senhaEt);
         olhoImg = findViewById(R.id.olhoImg);
         telaCadastro = findViewById(R.id.cadastroTxt);
+        loginBtn = findViewById(R.id.loginBtn);
 
-        telaCadastro.setOnClickListener(v ->{
+        telaCadastro.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             startActivity(intent);

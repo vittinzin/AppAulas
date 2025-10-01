@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="switch2" type="id" />
+    <item name="docenteTxt2" type="id" />
+    <item name="alunoTxt2" type="id" />
+    <item name="emailEt2" type="id" />
+    <item name="cpfEt" type="id" />
+    <item name="senhaEt2" type="id" />
+    <item name="confirmarSenhaEt" type="id" />
+    <item name="loginBtn2" type="id" />
+    <item name="imageView2" type="id" />
+    <item name="edtDisciplinaAluno" type="id" />
+</resources>
