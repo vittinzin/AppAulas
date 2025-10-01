@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -18,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
 import com.vitor.aulas.controller.RegisterDbController;
-import com.vitor.aulas.model.Aluno;
 import com.vitor.aulas.model.Usuario;
+import com.vitor.aulas.util.SenhaUtil;
 
 import java.util.List;
 
@@ -30,9 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEt, senhaEt;
     private ImageView olhoImg;
     private Button loginBtn;
-
-
     private RegisterDbController dbController;
+    private boolean isDocente = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         switch1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            isDocente = isChecked;
             if (isChecked) {
                 alunoTxt.setTypeface(null, Typeface.NORMAL);
                 docenteTxt.setTypeface(null, Typeface.BOLD);
@@ -95,30 +94,43 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailEt.getText().toString().trim();
         String senha = senhaEt.getText().toString().trim();
 
-        if (email.isEmpty() || senha.isEmpty()) {
-            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
+        if (email.isEmpty()) {
+            emailEt.setError("Campo obrigatório");
+            emailEt.requestFocus();
+            return;
+        }
+
+        if (senha.isEmpty()) {
+            senhaEt.setError("Campo obrigatório");
+            senhaEt.requestFocus();
             return;
         }
 
         List<Usuario> usuarios = dbController.getAll();
         boolean encontrado = false;
+        String tipoEsperado = isDocente ? "Docente" : "Aluno";
 
         for (Usuario u : usuarios) {
-            if (u.getEmail().equals(email) && u.getSenha().equals(senha)) {
-                encontrado = true;
+            if (u.getEmail().equals(email) && u.getTipo().equalsIgnoreCase(tipoEsperado)) {
 
-                if (u.getTipo().equalsIgnoreCase("Aluno")) {
-                    Intent intent = new Intent(LoginActivity.this, AlunoActivity.class);
-                    intent.putExtra("usuario_cpf", u.getCpf()); // manda o CPF, não o email
-                    startActivity(intent);
-                    finish();
-                } else if (u.getTipo().equalsIgnoreCase("Docente")) {
-                    Intent intent = new Intent(LoginActivity.this, ProfessorActivity.class);
-                    intent.putExtra("usuario_email", email);
-                    startActivity(intent);
-                    finish();
+                if (SenhaUtil.checkPassword(senha, u.getSenha())) {
+                    encontrado = true;
+
+                    if (u.getTipo().equalsIgnoreCase("Aluno")) {
+                        Intent intent = new Intent(LoginActivity.this, AlunoActivity.class);
+                        intent.putExtra("usuario_cpf", u.getCpf());
+                        intent.putExtra("usuario_email", u.getEmail());
+                        startActivity(intent);
+                        finish();
+                    } else if (u.getTipo().equalsIgnoreCase("Docente")) {
+                        Intent intent = new Intent(LoginActivity.this, ProfessorActivity.class);
+                        intent.putExtra("usuario_email", u.getEmail());
+                        intent.putExtra("usuario_cpf", u.getCpf());
+                        startActivity(intent);
+                        finish();
+                    }
+                    break;
                 }
-                break;
             }
         }
 
