@@ -13,7 +13,7 @@ import com.vitor.aulas.R;
 public class ProfessorActivity extends AppCompatActivity {
 
     private TextView welcomeTxt;
-    private Button registrarAlunoBtn, criarTurmaBtn, atribuirAtividadeBtn, gerenciarAtividadesBtn;
+    private Button registrarAlunoBtn, criarTurmaBtn, atribuirAtividadeBtn, gerenciarAtividadesBtn, editarAlunoBtn;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -26,6 +26,7 @@ public class ProfessorActivity extends AppCompatActivity {
         criarTurmaBtn = findViewById(R.id.criarTurmaBtn);
         atribuirAtividadeBtn = findViewById(R.id.atribuirAtividadeBtn);
         gerenciarAtividadesBtn = findViewById(R.id.gerenciarAtividadesBtn);
+        editarAlunoBtn = findViewById(R.id.btnEditar); // novo botão
 
         // Recebe o email do professor logado
         String email = getIntent().getStringExtra("usuario_email");
@@ -49,6 +50,11 @@ public class ProfessorActivity extends AppCompatActivity {
 
         gerenciarAtividadesBtn.setOnClickListener(v -> {
             Intent intent = new Intent(ProfessorActivity.this, AtribuirAtividadeActivity.class);
+            startActivity(intent);
+        });
+
+        editarAlunoBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfessorActivity.this, EditarAlunoActivity.class);
             startActivity(intent);
         });
     }

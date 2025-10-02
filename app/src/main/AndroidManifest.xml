@@ -53,6 +53,11 @@
             android:name=".view.ProfessorActivity"
             android:exported="false" />
 
+        <!-- Editar Aluno -->
+        <activity
+            android:name=".view.EditarAlunoActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

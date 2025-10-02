@@ -10,4 +10,5 @@
     <item name="loginBtn2" type="id" />
     <item name="imageView2" type="id" />
     <item name="edtDisciplinaAluno" type="id" />
+    <item name="salvarBtn" type="id" />
 </resources>
