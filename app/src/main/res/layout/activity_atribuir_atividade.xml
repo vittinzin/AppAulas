@@ -1,31 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="16dp"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#F5F5F5">
 
+    <!-- Título -->
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Atribuir Atividade"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1976D2"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Campo CPF -->
     <EditText
         android:id="@+id/cpfAlunoEt"
-        android:hint="CPF do aluno"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:hint="CPF do aluno"
+        android:background="@drawable/bg_input"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"
+        android:inputType="number"/>
 
+    <!-- Campo título -->
     <EditText
         android:id="@+id/tituloEt"
-        android:hint="Título da atividade"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:hint="Título da atividade"
+        android:background="@drawable/bg_input"
+        android:padding="12dp"
+        android:layout_marginBottom="12dp"/>
 
+    <!-- Campo descrição -->
     <EditText
         android:id="@+id/descricaoEt"
-        android:hint="Descrição da atividade"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:hint="Descrição da atividade"
+        android:background="@drawable/bg_input"
+        android:padding="12dp"
+        android:layout_marginBottom="20dp"
+        android:lines="3"
+        android:gravity="top"/>
 
     <Button
         android:id="@+id/atribuirBtn"
-        android:text="Atribuir Atividade"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:backgroundTint="#1976D2"
+        android:text="ATRIBUIR ATIVIDADE" />
+
+    <!-- Botão -->
+
 </LinearLayout>

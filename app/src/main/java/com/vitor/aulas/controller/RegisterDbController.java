@@ -13,7 +13,7 @@ import com.vitor.aulas.util.SenhaUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterDbController {
+public class    RegisterDbController {
 
     private RegisterDb rdb;
 
