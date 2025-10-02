@@ -2,6 +2,8 @@ package com.vitor.aulas.controller;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.vitor.aulas.model.Usuario;
 
@@ -28,6 +30,7 @@ public class RegisterController {
         }
         return -1;
     }
+
 
     public String getSavedName() {
         return sp.getString("name", null);

@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AtividadeDb extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "AtividadesDB";
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final String TABLE = "Atividades";
 
     public static final String ID = "id";

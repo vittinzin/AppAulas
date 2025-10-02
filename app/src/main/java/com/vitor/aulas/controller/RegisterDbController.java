@@ -21,51 +21,80 @@ public class RegisterDbController {
         rdb = new RegisterDb(context);
     }
 
-    public void insert(Usuario usuario) {
-        SQLiteDatabase db = null;
-        try {
-            db = rdb.getWritableDatabase();
-            ContentValues data = new ContentValues();
-            data.put(RegisterDb.EMAIL, usuario.getEmail());
-            data.put(RegisterDb.CPF, usuario.getCpf());
-            data.put(RegisterDb.PASSWORD, SenhaUtil.hashPassword(usuario.getSenha()));
-            data.put(RegisterDb.TIPO, usuario.getTipo());
+    private SQLiteDatabase db;
 
-            long result = db.insert(RegisterDb.TABLE, null, data);
-            if (result == -1) {
-                Log.e("DB", "Erro ao inserir usuário");
-            } else {
-                Log.d("DB", "Usuário inserido com sucesso, id=" + result);
-            }
-        } finally {
-            if (db != null) db.close();
+
+
+
+
+    public void insert(Usuario usuario) {
+        ContentValues data;
+        db = rdb.getWritableDatabase();
+
+        data = new ContentValues();
+        data.put(RegisterDb.EMAIL, usuario.getEmail());
+        data.put(RegisterDb.CPF, usuario.getCpf());
+        data.put(RegisterDb.PASSWORD, usuario.getSenha());
+        data.put(RegisterDb.TIPO, usuario.getTipo());
+        long result = db.insert(RegisterDb.TABLE, null, data);
+
+
+        if (result == -1) {
+            Log.e("DB", "Erro ao inserir usuário");
+
+
+        } else {
+
+
+            Log.d("DB", "Usuário inserido com sucesso, id=" + result);
+
         }
+
     }
 
+
     public List<Usuario> getAll() {
+
         List<Usuario> usuarios = new ArrayList<>();
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try {
-            db = rdb.getReadableDatabase();
-            cursor = db.query(RegisterDb.TABLE,
-                    new String[]{RegisterDb.EMAIL, RegisterDb.CPF, RegisterDb.PASSWORD, RegisterDb.TIPO},
-                    null, null, null, null, null);
+        SQLiteDatabase db = rdb.getReadableDatabase();
 
-            while (cursor != null && cursor.moveToNext()) {
-                String email = cursor.getString(cursor.getColumnIndexOrThrow(RegisterDb.EMAIL));
-                String cpf = cursor.getString(cursor.getColumnIndexOrThrow(RegisterDb.CPF));
-                String senha = cursor.getString(cursor.getColumnIndexOrThrow(RegisterDb.PASSWORD));
-                String tipo = cursor.getString(cursor.getColumnIndexOrThrow(RegisterDb.TIPO));
-                usuarios.add(new Usuario(email, cpf, senha, tipo));
-            }
+        Cursor cursor = db.query(RegisterDb.TABLE,
+                new String[]{RegisterDb.EMAIL, RegisterDb.CPF, RegisterDb.PASSWORD, RegisterDb.TIPO},
+                null, null, null, null, null);
 
-            Log.d("DB", "Total de usuários no banco: " + usuarios.size());
-        } finally {
-            if (cursor != null) cursor.close();
-            if (db != null) db.close();
+
+        while (cursor.moveToNext()) {
+
+            String email = cursor.getString(cursor.getColumnIndexOrThrow(RegisterDb.EMAIL));
+
+            String cpf = cursor.getString(cursor.getColumnIndexOrThrow(RegisterDb.CPF));
+
+            String senha = cursor.getString(cursor.getColumnIndexOrThrow(RegisterDb.PASSWORD));
+
+            String tipo = cursor.getString(cursor.getColumnIndexOrThrow(RegisterDb.TIPO));
+
+            usuarios.add(new Usuario(email, cpf, senha, tipo));
+
         }
+
+        cursor.close();
+        db.close();
+        Log.d("DB", "Total de usuários no banco: " + usuarios.size());
+
         return usuarios;
+
+    }
+
+    public boolean cpfExiste(String cpf) {
+        SQLiteDatabase db = rdb.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM UserData WHERE cpf = ?", new String[]{cpf});
+
+        boolean cpfExiste = cursor.getCount() > 0;
+
+        cursor.close();
+        db.close();
+
+        return cpfExiste;
     }
 
     public boolean redefinirSenha(String email, String novaSenha) {
@@ -81,21 +110,37 @@ public class RegisterDbController {
         }
     }
 
-    public boolean verificaUsuarioPorEmail(String email) {
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        try {
-            db = rdb.getReadableDatabase();
-            cursor = db.query(RegisterDb.TABLE,
-                    new String[]{RegisterDb.EMAIL},
-                    RegisterDb.EMAIL + " = ?",
-                    new String[]{email},
-                    null, null, null);
+    public Usuario getUsuarioPorEmailETipo(String email, String tipo) {
+        SQLiteDatabase db = rdb.getReadableDatabase();
+        Usuario usuario = null;
 
-            return cursor != null && cursor.moveToFirst();
-        } finally {
-            if (cursor != null) cursor.close();
-            if (db != null) db.close();
+        // Colunas que você quer de volta (exemplo)
+        String[] colunas = {"email", "tipo","cpf", "password"};
+
+        // WHERE email=? AND tipo=?
+        String selecao = "email = ? AND tipo = ?";
+        String[] argumentos = {email, tipo};
+
+        Cursor cursor = db.query("UserData", // substitua pelo nome da sua tabela
+                colunas,
+                selecao,
+                argumentos,
+                null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            // Crie e preencha o objeto Usuario com os dados do cursor
+            usuario = new Usuario();
+            usuario.setCpf(cursor.getString(cursor.getColumnIndexOrThrow("cpf")));
+            usuario.setEmail(cursor.getString(cursor.getColumnIndexOrThrow("email")));
+            usuario.setSenha(cursor.getString(cursor.getColumnIndexOrThrow("password")));
+            usuario.setTipo(cursor.getString(cursor.getColumnIndexOrThrow("tipo")));
+            // ... adicione outros campos conforme necessário
         }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+        db.close();
+        return usuario;
     }
 }

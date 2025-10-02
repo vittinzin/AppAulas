@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ProfessorDb extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "ProfessoresDB";
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
     public static final String TABLE = "Professores";
 
     public static final String ID = "id";

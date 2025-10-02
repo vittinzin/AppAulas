@@ -14,7 +14,7 @@ public class RegisterDb extends SQLiteOpenHelper implements BaseColumns {
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String TIPO = "tipo";
-    public static final int VERSION = 6;
+    public static final int VERSION = 8;
 
     public RegisterDb(Context context){
         super(context, DB_NAME,null,VERSION);

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
 import com.vitor.aulas.controller.AlunoDbController;
+import com.vitor.aulas.controller.RegisterDbController;
 import com.vitor.aulas.controller.TurmaDbController;
 import com.vitor.aulas.model.Aluno;
 
@@ -23,7 +24,7 @@ public class RegistrarAlunoActivity extends AppCompatActivity {
     private ImageButton btnVoltar;
     private AlunoDbController alunoController;
     private TurmaDbController turmaController;
-
+    private RegisterDbController dblo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +36,7 @@ public class RegistrarAlunoActivity extends AppCompatActivity {
         registrarBtn = findViewById(R.id.registrarBtn);
         btnVoltar = findViewById(R.id.btnVoltar);
 
+        dblo = new RegisterDbController(this);
         alunoController = new AlunoDbController(this);
         turmaController = new TurmaDbController(this);
 
@@ -56,6 +58,12 @@ public class RegistrarAlunoActivity extends AppCompatActivity {
 
             if (nome.isEmpty() || cpf.isEmpty()) {
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (dblo.cpfExiste(cpf)){
+                cpfEt.setError("CPF inválido");
+                cpfEt.requestFocus();
                 return;
             }
 

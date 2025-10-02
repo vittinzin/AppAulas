@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AlunoDb extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "SchoolDB";
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     public static final String TABLE_ALUNO = "Aluno";
     public static final String ID = "id";

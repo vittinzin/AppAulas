@@ -133,6 +133,12 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        if (dblo.cpfExiste(cpf)){
+            cpfEt.setError("CPF inválido");
+            cpfEt.requestFocus();
+            return;
+        }
+
         String senhaHash = SenhaUtil.hashPassword(senha);
 
         String tipo = isDocente ? "Docente" : "Aluno";

@@ -20,16 +20,16 @@ public class ProfessorDbController {
         pdb = new ProfessorDb(context);
     }
 
-    public long insertProfessor(Professor professor){
+    public void insertProfessor(Professor professor){
         db = pdb.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ProfessorDb.NOME, professor.getNome());
         values.put(ProfessorDb.CPF, professor.getCpf());
         values.put(ProfessorDb.EMAIL, professor.getEmail());
 
-        long id = db.insert(ProfessorDb.TABLE, null, values);
+        db.insert(ProfessorDb.TABLE, null, values);
         db.close();
-        return id;
+
     }
 
     public List<Professor> getAllProfessores(){

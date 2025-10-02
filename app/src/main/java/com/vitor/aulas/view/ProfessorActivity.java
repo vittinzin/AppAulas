@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +14,7 @@ import com.vitor.aulas.R;
 public class ProfessorActivity extends AppCompatActivity {
 
     private TextView welcomeTxt;
-    private Button registrarAlunoBtn, criarTurmaBtn, atribuirAtividadeBtn, gerenciarAtividadesBtn, editarAlunoBtn;
+    private ImageButton registrarAlunoBtn, criarTurmaBtn, atribuirAtividadeBtn, gerenciarAtividadesBtn, editarAlunoBtn;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -26,13 +27,12 @@ public class ProfessorActivity extends AppCompatActivity {
         criarTurmaBtn = findViewById(R.id.criarTurmaBtn);
         atribuirAtividadeBtn = findViewById(R.id.atribuirAtividadeBtn);
         gerenciarAtividadesBtn = findViewById(R.id.gerenciarAtividadesBtn);
-        editarAlunoBtn = findViewById(R.id.btnEditar); // novo botão
+        editarAlunoBtn = findViewById(R.id.btnEditar);
 
-        // Recebe o email do professor logado
         String email = getIntent().getStringExtra("usuario_email");
-        welcomeTxt.setText("Bem-vindo, Professor: " + email);
+        String nome = email.replace("@prof.com", "");
+        welcomeTxt.setText("Bem-vindo " + nome + "!");
 
-        // Botões
         registrarAlunoBtn.setOnClickListener(v -> {
             Intent intent = new Intent(ProfessorActivity.this, RegistrarAlunoActivity.class);
             startActivity(intent);
