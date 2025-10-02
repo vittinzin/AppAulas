@@ -33,7 +33,7 @@ public class ProfessorActivity extends AppCompatActivity {
 
         // Botões
         registrarAlunoBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfessorActivity.this, RegisterActivity.class);
+            Intent intent = new Intent(ProfessorActivity.this, RegistrarAlunoActivity.class);
             startActivity(intent);
         });
 
