@@ -11,8 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
-import com.vitor.aulas.controller.AlunoDbController;
-import com.vitor.aulas.controller.AtividadeDbController;
+import com.vitor.aulas.controller.DatabaseController;
 import com.vitor.aulas.model.Aluno;
 import com.vitor.aulas.model.Atividade;
 
@@ -20,8 +19,7 @@ public class AtribuirAtividadeActivity extends AppCompatActivity {
 
     private EditText cpfAlunoEt, tituloEt, descricaoEt;
     private Button atribuirBtn;
-    private AlunoDbController alunoController;
-    private AtividadeDbController atividadeController;
+    private DatabaseController dbController;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -34,8 +32,7 @@ public class AtribuirAtividadeActivity extends AppCompatActivity {
         descricaoEt = findViewById(R.id.descricaoEt);
         atribuirBtn = findViewById(R.id.atribuirBtn);
 
-        alunoController = new AlunoDbController(this);
-        atividadeController = new AtividadeDbController(this);
+        dbController = new DatabaseController(this);
 
         atribuirBtn.setOnClickListener(v -> {
             String cpf = cpfAlunoEt.getText().toString().trim();
@@ -47,7 +44,7 @@ public class AtribuirAtividadeActivity extends AppCompatActivity {
                 return;
             }
 
-            Aluno aluno = alunoController.getAlunoByCpf(cpf);
+            Aluno aluno = dbController.getAlunoByCpf(cpf);
             if(aluno == null){
                 Toast.makeText(this, "Aluno não encontrado", Toast.LENGTH_SHORT).show();
                 return;
@@ -55,7 +52,7 @@ public class AtribuirAtividadeActivity extends AppCompatActivity {
 
             // CORREÇÃO: usar CPF do aluno, não o ID
             Atividade atividade = new Atividade(0, titulo, descricao, aluno.getCpf());
-            long id = atividadeController.insertAtividade(atividade);
+            long id = dbController.insertAtividade(atividade);
 
             if(id != -1){
                 Toast.makeText(this, "Atividade atribuída com sucesso!", Toast.LENGTH_SHORT).show();

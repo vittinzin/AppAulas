@@ -11,8 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
-import com.vitor.aulas.controller.AlunoDbController;
-import com.vitor.aulas.controller.TurmaDbController;
+import com.vitor.aulas.controller.DatabaseController;
 import com.vitor.aulas.model.Aluno;
 
 public class RegistrarAlunoActivity extends AppCompatActivity {
@@ -21,8 +20,6 @@ public class RegistrarAlunoActivity extends AppCompatActivity {
     private Spinner turmaSpinner;
     private Button registrarBtn;
     private ImageButton btnVoltar;
-    private AlunoDbController alunoController;
-    private TurmaDbController turmaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +32,7 @@ public class RegistrarAlunoActivity extends AppCompatActivity {
         registrarBtn = findViewById(R.id.registrarBtn);
         btnVoltar = findViewById(R.id.btnVoltar);
 
-        alunoController = new AlunoDbController(this);
-        turmaController = new TurmaDbController(this);
+        DatabaseController dbController = new DatabaseController(this);
 
         btnVoltar.setOnClickListener(v -> finish());
 
@@ -62,7 +58,7 @@ public class RegistrarAlunoActivity extends AppCompatActivity {
             int turmaId = turmaSpinner.getSelectedItemPosition() + 1;
 
             Aluno aluno = new Aluno(0, nome, cpf, turmaId);
-            long id = alunoController.insertAluno(aluno);
+            long id = dbController.insertAluno(aluno);
 
             if (id != -1) {
                 Toast.makeText(this, "Aluno registrado na " + turmaSelecionada, Toast.LENGTH_SHORT).show();

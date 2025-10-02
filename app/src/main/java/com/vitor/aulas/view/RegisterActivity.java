@@ -12,10 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
-import com.vitor.aulas.controller.AlunoDbController;
-import com.vitor.aulas.controller.RegisterDbController;
+import com.vitor.aulas.controller.DatabaseController;
 import com.vitor.aulas.controller.RegisterController;
-import com.vitor.aulas.controller.ProfessorDbController;
 import com.vitor.aulas.model.Aluno;
 import com.vitor.aulas.model.Professor;
 import com.vitor.aulas.model.Usuario;
@@ -31,9 +29,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText emailEt2, cpfEt, senhaEt2, confirmarSenhaEt;
     private Button loginBtn2;
     private RegisterController rc;
-    private RegisterDbController dblo;
-    private AlunoDbController alunoController;
-    private ProfessorDbController professorController;
+    private DatabaseController dbController;
 
     private boolean isDocente = false;
 
@@ -53,9 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnVoltar = findViewById(R.id.btnVoltar);
 
         rc = new RegisterController();
-        dblo = new RegisterDbController(this);
-        alunoController = new AlunoDbController(this);
-        professorController = new ProfessorDbController(this);
+        dbController = new DatabaseController(this);
 
         btnVoltar.setOnClickListener(v -> finish());
 
@@ -140,21 +134,21 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (rc.confirmRegister(usuario) == -1) {
 
-            dblo.insert(usuario);
-
+            // Inserir usuário e dados associados usando DatabaseController
+            dbController.insertUsuario(usuario);
             if (isDocente) {
                 Professor professor = new Professor(0, email, cpfLimpo, email);
-                professorController.insertProfessor(professor);
+                dbController.insertProfessor(professor);
             } else {
                 Aluno aluno = new Aluno(0, email, cpfLimpo, 1);
-                alunoController.insertAluno(aluno);
+                dbController.insertAluno(aluno);
             }
 
             Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             finish();
 
-            List<Usuario> list = dblo.getAll();
+            List<Usuario> list = dbController.getAllUsuarios();
             android.util.Log.d("DB", "Usuarios no banco agora: " + list.size());
 
         } else {

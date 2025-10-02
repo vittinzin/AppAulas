@@ -7,7 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class AlunoDb extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "SchoolDB";
-    public static final int VERSION = 1;
+    // Incrementar versão por ter adicionado novas tabelas (usuarios, professores)
+    public static final int VERSION = 2;
 
     public static final String TABLE_ALUNO = "Aluno";
     public static final String ID = "id";
@@ -23,6 +24,20 @@ public class AlunoDb extends SQLiteOpenHelper {
     public static final String ATIVIDADE_TITULO = "titulo";
     public static final String ATIVIDADE_DESC = "descricao";
     public static final String ALUNO_ID = "aluno_id";
+
+    // Users table (migrated from RegisterDb)
+    public static final String TABLE_USER = "UserData"; // same name used in RegisterDb
+    public static final String USER_EMAIL = "email";
+    public static final String USER_CPF = "cpf";
+    public static final String USER_PASSWORD = "password";
+    public static final String USER_TIPO = "tipo";
+
+    // Professors table (migrated from ProfessorDb)
+    public static final String TABLE_PROFESSOR = "Professores";
+    public static final String PROFESSOR_ID = "id"; // reuse ID
+    public static final String PROFESSOR_NOME = "nome"; // reuse NOME
+    public static final String PROFESSOR_CPF = "cpf";
+    public static final String PROFESSOR_EMAIL = "email";
 
     public AlunoDb(Context context) {
         super(context, DB_NAME, null, VERSION);
@@ -51,14 +66,33 @@ public class AlunoDb extends SQLiteOpenHelper {
                 + ALUNO_ID + " INTEGER, "
                 + "FOREIGN KEY(" + ALUNO_ID + ") REFERENCES " + TABLE_ALUNO + "(" + ID + "))";
         db.execSQL(CREATE_ATIVIDADE);
+
+        // Criar tabela de usuários (compatível com RegisterDb.TABLE = "UserData")
+        String CREATE_USER = "CREATE TABLE " + TABLE_USER + " ("
+                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + USER_EMAIL + " text, "
+                + USER_CPF + " text, "
+                + USER_PASSWORD + " text, "
+                + USER_TIPO + " text)";
+        db.execSQL(CREATE_USER);
+
+        // Criar tabela de professores (compatível com ProfessorDb.TABLE = "Professores")
+        String CREATE_PROF = "CREATE TABLE " + TABLE_PROFESSOR + " ("
+                + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + PROFESSOR_NOME + " TEXT, "
+                + PROFESSOR_CPF + " TEXT, "
+                + PROFESSOR_EMAIL + " TEXT)";
+        db.execSQL(CREATE_PROF);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Remover tabelas antigas e recriar tudo. Se precisar de migração real, implementar aqui.
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ATIVIDADE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALUNO);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TURMA);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFESSOR);
         onCreate(db);
     }
 }
-

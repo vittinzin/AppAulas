@@ -10,15 +10,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
-import com.vitor.aulas.controller.AtividadeDbController;
+import com.vitor.aulas.controller.DatabaseController;
 import com.vitor.aulas.model.Atividade;
 
 import java.util.List;
 
 public class AlunoAtividadesActivity extends AppCompatActivity {
-
-    private LinearLayout containerAtividades;
-    private AtividadeDbController dbController;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -26,8 +23,8 @@ public class AlunoAtividadesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aluno_atividades);
 
-        containerAtividades = findViewById(R.id.containerAtividades);
-        dbController = new AtividadeDbController(this);
+        LinearLayout containerAtividades = findViewById(R.id.containerAtividades);
+        DatabaseController dbController = new DatabaseController(this);
 
         // Recebe o CPF do aluno logado
         String alunoCpf = getIntent().getStringExtra("usuario_cpf");
@@ -41,7 +38,7 @@ public class AlunoAtividadesActivity extends AppCompatActivity {
 
         if (atividades.isEmpty()) {
             TextView emptyTv = new TextView(this);
-            emptyTv.setText("Nenhuma atividade encontrada.");
+            emptyTv.setText(getString(R.string.nenhuma_atividade));
             emptyTv.setTextSize(16f);
             containerAtividades.addView(emptyTv);
         } else {

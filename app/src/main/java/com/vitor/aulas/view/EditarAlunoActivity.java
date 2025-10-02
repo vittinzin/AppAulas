@@ -9,14 +9,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
-import com.vitor.aulas.controller.AlunoDbController;
+import com.vitor.aulas.controller.DatabaseController;
 import com.vitor.aulas.model.Aluno;
 
 public class EditarAlunoActivity extends AppCompatActivity {
 
     private EditText nomeEt, cpfEt, turmaEt;
     private Button salvarBtn;
-    private AlunoDbController alunoDbController;
+    private DatabaseController dbController;
     private String cpfAluno;
     private Aluno aluno;
 
@@ -34,13 +34,13 @@ public class EditarAlunoActivity extends AppCompatActivity {
         // Tornar CPF não-editável
         cpfEt.setEnabled(false);
 
-        alunoDbController = new AlunoDbController(this);
+        dbController = new DatabaseController(this);
 
         // Recuperar CPF enviado pela intent
         cpfAluno = getIntent().getStringExtra("cpf_aluno");
 
         if (cpfAluno != null) {
-            aluno = alunoDbController.getAlunoByCpf(cpfAluno);
+            aluno = dbController.getAlunoByCpf(cpfAluno);
             if (aluno != null) {
                 nomeEt.setText(aluno.getNome());
                 cpfEt.setText(aluno.getCpf());
@@ -74,7 +74,7 @@ public class EditarAlunoActivity extends AppCompatActivity {
         aluno.setNome(novoNome);
         aluno.setTurmaId(novaTurma);
 
-        int linhasAtualizadas = alunoDbController.updateAluno(aluno);
+        int linhasAtualizadas = dbController.updateAluno(aluno);
 
         if (linhasAtualizadas > 0) {
             Toast.makeText(this, "Dados atualizados com sucesso!", Toast.LENGTH_SHORT).show();

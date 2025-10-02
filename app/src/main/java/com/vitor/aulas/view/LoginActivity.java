@@ -18,7 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
-import com.vitor.aulas.controller.RegisterDbController;
+import com.vitor.aulas.controller.DatabaseController;
 import com.vitor.aulas.model.Usuario;
 import com.vitor.aulas.util.SenhaUtil;
 
@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailEt, senhaEt;
     private ImageView olhoImg;
     private Button loginBtn;
-    private RegisterDbController dbController;
+    private DatabaseController dbController;
     private boolean isDocente = false;
 
     @Override
@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn = findViewById(R.id.loginBtn);
         tvForgotPassword = findViewById(R.id.tvForgotPassword);
 
-        dbController = new RegisterDbController(this);
+        dbController = new DatabaseController(this);
 
         // Navegar para tela de cadastro
         telaCadastro.setOnClickListener(v -> {
@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        List<Usuario> usuarios = dbController.getAll();
+        List<Usuario> usuarios = dbController.getAllUsuarios();
         boolean encontrado = false;
         String tipoEsperado = isDocente ? "Docente" : "Aluno";
 

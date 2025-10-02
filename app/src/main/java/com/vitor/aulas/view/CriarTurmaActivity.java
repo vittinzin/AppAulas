@@ -10,14 +10,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vitor.aulas.R;
-import com.vitor.aulas.controller.TurmaDbController;
+import com.vitor.aulas.controller.DatabaseController;
 import com.vitor.aulas.model.Turma;
 
 public class CriarTurmaActivity extends AppCompatActivity {
 
     private EditText nomeEt, anoEt;
     private Button criarBtn;
-    private TurmaDbController turmaController;
+    private DatabaseController dbController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class CriarTurmaActivity extends AppCompatActivity {
         anoEt = findViewById(R.id.anoEt);
         criarBtn = findViewById(R.id.criarBtn);
 
-        turmaController = new TurmaDbController(this);
+        dbController = new DatabaseController(this);
 
         criarBtn.setOnClickListener(v -> {
             String nome = nomeEt.getText().toString().trim();
@@ -40,7 +40,7 @@ public class CriarTurmaActivity extends AppCompatActivity {
             }
 
             Turma turma = new Turma(0, nome, ano);
-            long id = turmaController.insertTurma(turma);
+            long id = dbController.insertTurma(turma);
 
             if(id != -1){
                 Toast.makeText(this, "Turma criada com sucesso!", Toast.LENGTH_SHORT).show();
@@ -51,4 +51,3 @@ public class CriarTurmaActivity extends AppCompatActivity {
         });
     }
 }
-

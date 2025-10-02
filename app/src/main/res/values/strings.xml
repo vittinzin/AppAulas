@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Aulas</string>
+    <string name="nenhuma_atividade">Nenhuma atividade encontrada.</string>
 </resources>
